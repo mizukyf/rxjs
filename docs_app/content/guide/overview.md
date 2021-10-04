@@ -77,7 +77,7 @@ document.addEventListener('click', () => {
 });
 ```
 
-一方RxJSを使用する場合は次のようになります：
+RxJSを使用する場合は次のようになります：
 
 ```ts
 import { fromEvent } from 'rxjs';
@@ -93,11 +93,11 @@ fromEvent(document, 'click')
 
 その他のフロー制御オペレーターには、[**filter**](../api/operators/filter)、 [**delay**](../api/operators/delay)、 [**debounceTime**](../api/operators/debounceTime)、 [**take**](../api/operators/take)、 [**takeUntil**](../api/operators/takeUntil)、 [**distinct**](../api/operators/distinct)、 [**distinctUntilChanged**](../api/operators/distinctUntilChanged) などがあります。
 
-### Values
+### 値のシーケンス
 
-You can transform the values passed through your observables.
+Observableオブジェクトから配信された値を変換することもできます。
 
-Here's how you can add the current mouse x position for every click, in plain JavaScript:
+例えば、クリック・イベントのたびにイベント発生時点のマウスカーソルのX座標の値を足し合わせていく処理を考えます。RxJSを使用しない場合は次のようになるでしょう：
 
 ```ts
 let count = 0;
@@ -112,7 +112,7 @@ document.addEventListener('click', event => {
 });
 ```
 
-With RxJS:
+RxJSを使用する場合は次のようになります：
 
 ```ts
 import { fromEvent } from 'rxjs';
@@ -127,4 +127,4 @@ fromEvent(document, 'click')
   .subscribe(count => console.log(count));
 ```
 
-Other value producing operators are [**pluck**](../api/operators/pluck), [**pairwise**](../api/operators/pairwise), [**sample**](../api/operators/sample) etc.
+その他の値生成オペレーターには、 [**pluck**](../api/operators/pluck)、 [**pairwise**](../api/operators/pairwise)、 [**sample**](../api/operators/sample) などがあります。
