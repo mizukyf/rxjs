@@ -18,15 +18,15 @@ RxJSもその一部であるところのツールセットReactiveX（Reactive E
 - **Subject:** これは `EventEmitter` と同義で、値やイベントを複数のObserverたちに一斉配信するものです。
 - **Schedulers:** 並列処理を制御する司令係であり、 `setTimeout` や `requestAnimationFrame` その他により生起する計算処理を連携させることを可能にします。
 
-## First examples
+## 最初の例
 
-Normally you register event listeners.
+今までイベントリスナーを登録する場合次のようにしてきたと思います。
 
 ```ts
 document.addEventListener('click', () => console.log('Clicked!'));
 ```
 
-Using RxJS you create an observable instead.
+これに対して、RxJSを使う場合、Observableを作成します。
 
 ```ts
 import { fromEvent } from 'rxjs';
