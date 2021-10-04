@@ -1,6 +1,9 @@
 # はじめに
 
-RxJSは "オブザーバブルなシーケンス" を利用して非同期かつイベントベースのプログラムを構成するためのライブラリです。"オブザーバブルなシーケンス" とはGoFのデザインパターンの1つ、ObserverパターンにおけるSubjectとそれが1回ないし複数回に渡って生起するイベントのコレクションです。中核となる型である [Observable](./guide/observable) 、それとともに用いられる複数の型（Observer、Schedulers、Subjects）そして複数のオペレーターを提供します。オペレーターは [Array#extras](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/1.6) （map、filter、reduce、everyなど）に触発されたもので、非同期に発生するイベントをコレクション（シーケンス）として処理することを可能にするものです。
+RxJSは "オブザーバブルなシーケンス" を利用して非同期かつイベントベースのプログラムを構成するためのライブラリです。
+〔 "オブザーバブルなシーケンス" とはGoFのデザインパターンの1つ、ObserverパターンにおけるSubjectとそれが1回ないし複数回に渡って生起するイベントのコレクションです。〕
+このライブラリは中核となる型である [Observable](./guide/observable) 、それとともに用いられる複数の型（Observer、Schedulers、Subjects）そして複数のオペレーターを提供します。
+オペレーターは [Array#extras](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/1.6) （map、filter、reduce、everyなど）に触発されたもので、非同期に発生するイベントをコレクション（シーケンス）として処理することを可能にするものです。
 
 <span class="informal">RxJSはイベントに特化したLodashのようなものです。</span>
 
