@@ -1,19 +1,19 @@
-# Introduction
+# はじめに
 
-RxJS is a library for composing asynchronous and event-based programs by using observable sequences. It provides one core type, the [Observable](./guide/observable), satellite types (Observer, Schedulers, Subjects) and operators inspired by [Array#extras](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/1.6) (map, filter, reduce, every, etc) to allow handling asynchronous events as collections.
+RxJSは "オブザーバブルなシーケンス" を利用して非同期かつイベントベースのプログラムを構成するためのライブラリです。"オブザーバブルなシーケンス" とはGoFのデザインパターンの1つ、ObserverパターンにおけるSubjectとそれが1回ないし複数回に渡って生起するイベントのコレクションです。中核となる型である [Observable](./guide/observable) 、それとともに用いられる複数の型（Observer、Schedulers、Subjects）そして複数のオペレーターを提供します。オペレーターは [Array#extras](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/1.6) （map、filter、reduce、everyなど）に触発されたもので、非同期に発生するイベントをコレクション〔シーケンス〕として処理することを可能にするものです。
 
-<span class="informal">Think of RxJS as Lodash for events.</span>
+<span class="informal">RxJSはイベントに特化したLodashのようなものです。</span>
 
-ReactiveX combines the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) with the [Iterator pattern](https://en.wikipedia.org/wiki/Iterator_pattern) and [functional programming with collections](http://martinfowler.com/articles/collection-pipeline/#NestedOperatorExpressions) to fill the need for an ideal way of managing sequences of events.
+RxJSもその一部であるところのツールセットReactiveX（Reactive Extensions）は [Observerパターン](https://en.wikipedia.org/wiki/Observer_pattern) と [Iteratorパターン](https://en.wikipedia.org/wiki/Iterator_pattern)、そして [コレクションを操作する関数型プログラミング](http://martinfowler.com/articles/collection-pipeline/#NestedOperatorExpressions)を組み合わせたものです。このツールセットはイベントのシーケンス（コレクション）を管理する概念的な方法を提供するために考案されました。
 
-The essential concepts in RxJS which solve async event management are:
+非同期に生起するイベントを管理するためにRxJSが用いる最重要概念は次のものです：
 
-- **Observable:** represents the idea of an invokable collection of future values or events.
-- **Observer:** is a collection of callbacks that knows how to listen to values delivered by the Observable.
-- **Subscription:** represents the execution of an Observable, is primarily useful for cancelling the execution.
-- **Operators:** are pure functions that enable a functional programming style of dealing with collections with operations like `map`, `filter`, `concat`, `reduce`, etc.
-- **Subject:** is equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
-- **Schedulers:** are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. `setTimeout` or `requestAnimationFrame` or others.
+- **Observable:** いずれ得られる値のコレクションないしいずれ起こるイベントのコレクションを表すオブジェクトです。
+- **Observer:** Observableから届けられる値をどのように受け取り処理するかを定義したコールバック関数の集まりです。
+- **Subscription:** Observableの "実行" を表すオブジェクトで、これを通じて "実行" の中止を働きかけることができます。
+- **Operators:** 通常のコレクションに対する `map`、`filter`、`concat`、 `reduce`のような方法で、オブザーバブルなシーケンスに対する関数型プログラミングを可能にする純粋な（つまり副作用を伴わない）関数群です。
+- **Subject:** これはEventEmitterと同義で、値やイベントを複数のObserverたちに一斉配信するものです。
+- **Schedulers:** `setTimeout` or `requestAnimationFrame` or others.並列処理を制御する司令係であり、 `setTimeout` や `requestAnimationFrame` その他により生起する計算処理を連携させることを可能にします。
 
 ## First examples
 
