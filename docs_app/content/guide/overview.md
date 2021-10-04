@@ -16,7 +16,7 @@ RxJSもその一部であるところのツールセットReactiveX（Reactive E
 - **Subscription:** Observableの "実行" を表すオブジェクトで、これを通じて "実行" の中止を働きかけることができます。
 - **Operators:** 通常のコレクションに対する `map`、`filter`、`concat`、 `reduce`のような方法で、オブザーバブルなシーケンスに対する関数型プログラミングを可能にする純粋な（つまり副作用を伴わない）関数群です。
 - **Subject:** これはEventEmitterと同義で、値やイベントを複数のObserverたちに一斉配信するものです。
-- **Schedulers:** `setTimeout` or `requestAnimationFrame` or others.並列処理を制御する司令係であり、 `setTimeout` や `requestAnimationFrame` その他により生起する計算処理を連携させることを可能にします。
+- **Schedulers:** 並列処理を制御する司令係であり、 `setTimeout` や `requestAnimationFrame` その他により生起する計算処理を連携させることを可能にします。
 
 ## First examples
 
