@@ -59,11 +59,11 @@ fromEvent(document, 'click')
 
 **scan** オペレーターはちょうど配列に対する **reduce** のように働きます。このオペレーターが第2引数による値は第1引数のコールバック関数に渡されます。コールバック関数が実行され値を返すと、今度はその値が同じコールバック関数に渡されます。以降この繰り返しです。
 
-### Flow
+### フロー
 
-RxJS has a whole range of operators that helps you control how the events flow through your observables.
+RxJSはObservableオブジェクトから通知されるイベントの流れを制御するために広範な用途のオペーレーター群を提供しています。
 
-This is how you would allow at most one click per second, with plain JavaScript:
+例えば、1秒あたり1クリックまでという制限のもとで何かをさせたいという場合を考えます。RxJSを使用しない場合は次のようになるでしょう：
 
 ```ts
 let count = 0;
@@ -77,7 +77,7 @@ document.addEventListener('click', () => {
 });
 ```
 
-With RxJS:
+一方RxJSを使用する場合は次のようになります：
 
 ```ts
 import { fromEvent } from 'rxjs';
@@ -91,7 +91,7 @@ fromEvent(document, 'click')
   .subscribe(count => console.log(`Clicked ${count} times`));
 ```
 
-Other flow control operators are [**filter**](../api/operators/filter), [**delay**](../api/operators/delay), [**debounceTime**](../api/operators/debounceTime), [**take**](../api/operators/take), [**takeUntil**](../api/operators/takeUntil), [**distinct**](../api/operators/distinct), [**distinctUntilChanged**](../api/operators/distinctUntilChanged) etc.
+その他のフロー制御オペレーターには、[**filter**](../api/operators/filter)、 [**delay**](../api/operators/delay)、 [**debounceTime**](../api/operators/debounceTime)、 [**take**](../api/operators/take)、 [**takeUntil**](../api/operators/takeUntil)、 [**distinct**](../api/operators/distinct)、 [**distinctUntilChanged**](../api/operators/distinctUntilChanged) などがあります。
 
 ### Values
 
