@@ -34,19 +34,19 @@ import { fromEvent } from 'rxjs';
 fromEvent(document, 'click').subscribe(() => console.log('Clicked!'));
 ```
 
-### Purity
+### 純粋さ（副作用の回避）
 
-What makes RxJS powerful is its ability to produce values using pure functions. That means your code is less prone to errors.
+RxJSを強力なものとしているのは、純粋な関数（副作用を伴わない関数）を使って値を生成する能力です。純粋な関数の使用はあなたのコードからエラーが起きるリスクを低減します。
 
-Normally you would create an impure function, where other
-pieces of your code can mess up your state.
+純粋でない関数（副作用を伴う関数）は、あなたが書いた他のコードにより状態（ステート）を意図しない形で書き換えられてしまうリスクを孕んでいます。
+〔次のコードではイベントリスナー関数がその外側のスコープにある変数 `count` を参照更新していますが、この変数はスコープを共有する他のコードから参照更新できてしまいます。〕
 
 ```ts
 let count = 0;
 document.addEventListener('click', () => console.log(`Clicked ${++count} times`));
 ```
 
-Using RxJS you isolate the state.
+RxJSを使用することであなたは状態（ステート）を分離することができます。
 
 ```ts
 import { fromEvent } from 'rxjs';
@@ -57,7 +57,7 @@ fromEvent(document, 'click')
   .subscribe(count => console.log(`Clicked ${count} times`));
 ```
 
-The **scan** operator works just like **reduce** for arrays. It takes a value which is exposed to a callback. The returned value of the callback will then become the next value exposed the next time the callback runs.
+**scan** オペレーターはちょうど配列に対する **reduce** のように働きます。このオペレーターが第2引数による値は第1引数のコールバック関数に渡されます。コールバック関数が実行され値を返すと、今度はその値が同じコールバック関数に渡されます。以降この繰り返しです。
 
 ### Flow
 
