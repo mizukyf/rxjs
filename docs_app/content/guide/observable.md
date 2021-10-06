@@ -1,13 +1,13 @@
 # Observable
 
-Observables are lazy Push collections of multiple values. They fill the missing spot in the following table:
+種々のObservableは遅延処理に基づくプッシュ型コレクションです。それらは次の表のセルを埋める要素の1つです：
 
-| | Single | Multiple |
+| | 単一値を生む | 複数値を生む |
 | --- | --- | --- |
-| **Pull** | [`Function`](https://developer.mozilla.org/en-US/docs/Glossary/Function) | [`Iterator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) |
-| **Push** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | [`Observable`](/api/index/class/Observable) |
+| **プル型** | [`Function`](https://developer.mozilla.org/en-US/docs/Glossary/Function) | [`Iterator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) |
+| **プッシュ型** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | [`Observable`](/api/index/class/Observable) |
 
-**Example.** The following is an Observable that pushes the values `1`, `2`, `3` immediately (synchronously) when subscribed, and the value `4` after one second has passed since the subscribe call, then completes:
+**例を示しましょう。** 次のコードはあるObservableインスタンスを生成するものです。このObservableはsubscribe()されると直ちに（同期的に）`1`、`2`、`3` という値をプッシュします。そしてそれから1秒後に `4` という値を生成して、完了します。
 
 ```ts
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ const observable = new Observable(subscriber => {
 });
 ```
 
-To invoke the Observable and see these values, we need to *subscribe* to it:
+Observableを実行して値を生み出すには、 *subscribe* を呼び出してやる必要があります：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -38,36 +38,38 @@ const observable = new Observable(subscriber => {
   }, 1000);
 });
 
-console.log('just before subscribe');
+console.log('subscribeの直前');
 observable.subscribe({
-  next(x) { console.log('got value ' + x); },
-  error(err) { console.error('something wrong occurred: ' + err); },
-  complete() { console.log('done'); }
+  next(x) { console.log('次の値を得ました ' + x); },
+  error(err) { console.error('何か間違ってます: ' + err); },
+  complete() { console.log('完了しました'); }
 });
-console.log('just after subscribe');
+console.log('subscribeの直後');
 ```
 
-Which executes as such on the console:
+これを実行するとコンソールには次のように出力されるでしょう:
 
 ```none
-just before subscribe
-got value 1
-got value 2
-got value 3
-just after subscribe
-got value 4
-done
+subscribe直前
+次の値を得ました 1
+次の値を得ました 2
+次の値を得ました 3
+subscribe直後
+次の値を得ました 4
+完了しました
 ```
 
-## Pull versus Push
+## プル対プッシュ
 
-*Pull* and *Push* are two different protocols that describe how a data *Producer* can communicate with a data *Consumer*.
+*プル* と *プッシュ* は、データの *生産者（Producer）* とデータの*消費者（Consumer）* がどのようにやり取りをするかをプログラムで記述するための2つの異なる方法を表しています。
 
-**What is Pull?** In Pull systems, the Consumer determines when it receives data from the data Producer. The Producer itself is unaware of when the data will be delivered to the Consumer.
+**プルとは何でしょうか？** プル型の仕組みにおいては、生産者が生み出すデータをいつ受け取るかを消費者が決めます。生産者はデータがいつ消費者のもとに届けられるか関知しません。
 
-Every JavaScript Function is a Pull system. The function is a Producer of data, and the code that calls the function is consuming it by "pulling" out a *single* return value from its call.
+すべてのJavaScriptの関数はプル型の仕組みと捉えることができます。関数はデータの生産者であり、関数を呼び出すコードは *単一の* 戻り値を取り出して（プルして）消費します。
 
-ES2015 introduced [generator functions and iterators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) (`function*`), another type of Pull system. Code that calls `iterator.next()` is the Consumer, "pulling" out *multiple* values from the iterator (the Producer).
+ES2015ではもう1つのプル型の仕組みとみなすことができる [ジェネレータ関数とイテレータ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) (`function*`)が導入されました。`iterator.next()` を呼び出すコードは消費者であり、イテレーター（生産者）から *複数の*
+値を取り出して（プルして）消費します。
+
 
 
 | | Producer | Consumer |
