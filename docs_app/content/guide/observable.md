@@ -72,10 +72,10 @@ ES2015ではもう1つのプル型の仕組みとみなすことができる [�
 
 
 
-| | Producer | Consumer |
+| | 生産者（Producer） | 消費者（Consumer） |
 | --- | --- | --- |
-| **Pull** | **Passive:** produces data when requested. | **Active:** decides when data is requested. |
-| **Push** | **Active:** produces data at its own pace. | **Passive:** reacts to received data. |
+| **プル型** | **受動的:** 要求された時データを生成する | **能動的:** いつデータを要求するか決める |
+| **プッシュ型** | **能動的:** 自分自身のペースでデータを生成する | **受動的:** データを受信した時にリアクションする |
 
 **What is Push?** In Push systems, the Producer determines when to send data to the Consumer. The Consumer is unaware of when it will receive that data.
 
