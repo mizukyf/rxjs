@@ -63,7 +63,7 @@ subscribe直後
 
 *プル* と *プッシュ* は、データの *生産者（Producer）* とデータの*消費者（Consumer）* がどのようにやり取りをするかをプログラムで記述するための2つの異なる方法を表しています。
 
-**プルとは何でしょうか？** プル型の仕組みにおいては、生産者が生み出すデータをいつ受け取るかを消費者が決めます。生産者はデータがいつ消費者のもとに届けられるか関知しません。
+**プルとは何でしょうか？** プル型の仕組みにおいては、生産者が生み出すデータをいつ受け取るかを決めるのは消費者です。生産者はデータがいつ消費者のもとに届けられるか関知しません。
 
 すべてのJavaScriptの関数はプル型の仕組みと捉えることができます。関数はデータの生産者であり、関数を呼び出すコードは *単一の* 戻り値を取り出して（プルして）消費します。
 
@@ -77,18 +77,18 @@ ES2015ではもう1つのプル型の仕組みとみなすことができる [�
 | **プル型** | **受動的:** 要求された時データを生成する | **能動的:** いつデータを要求するか決める |
 | **プッシュ型** | **能動的:** 自分自身のペースでデータを生成する | **受動的:** データを受信した時にリアクションする |
 
-**What is Push?** In Push systems, the Producer determines when to send data to the Consumer. The Consumer is unaware of when it will receive that data.
+**プッシュとは何でしょうか？** プッシュ型の仕組みにおいては、データがいつ消費者のもとに届けられるかを決めるのは生産者です。消費者はデータがいつ手元に届けられるか関知しません。
 
-Promises are the most common type of Push system in JavaScript today. A Promise (the Producer) delivers a resolved value to registered callbacks (the Consumers), but unlike functions, it is the Promise which is in charge of determining precisely when that value is "pushed" to the callbacks.
+Promiseは今日のJavaScriptでもっとも一般的に知られたプッシュ型の仕組みです。プロミス（データの生産者）は解決された値をあらかじめ登録されたコールバック関数（データの消費者）に配信します。プル型の仕組みの説明で例示した関数呼び出しと異なり、Promiseは値がいつコールバックに対して配信されるか正確に決める立場にいます。
 
-RxJS introduces Observables, a new Push system for JavaScript. An Observable is a Producer of multiple values, "pushing" them to Observers (Consumers).
+RxJSはJavaScriptにおける新しいプッシュ型の仕組みとしてObservableを提供します。Observableは複数値を生み出す生産者であり、 Observer （消費者）にその値を配信します。
 
-- A **Function** is a lazily evaluated computation that synchronously returns a single value on invocation.
-- A **generator** is a lazily evaluated computation that synchronously returns zero to (potentially) infinite values on iteration.
-- A **Promise** is a computation that may (or may not) eventually return a single value.
-- An **Observable** is a lazily evaluated computation that can synchronously or asynchronously return zero to (potentially) infinite values from the time it's invoked onwards.
+- **Function** は遅延評価されます。〔というのは値そのものを表すのではなく、必要になった時にそれを呼び出すことで値が得られるので。〕関数は呼び出しの都度、単一値を同期的に返します。
+- **ジェネレータ** もまた遅延評価されます。〔同上の観点で。〕ジェネレータは1つも値を生成しないこともあれば無限に値を返すこともあります。それらの値は繰り返し処理の中で同期的に返します。
+- **Promise** はいずれ単一の値を返します（エラーによりいかなる値も返さないこともあります）。
+- **Observable** は遅延評価されます。同期的ないし非同期的に値を返します。subscribe()がされたあとObservableは1つも値を生成しないこともあれば無限に値を返すこともあります。
 
-<span class="informal">For more info about what to use when converting Observables to Promises, please refer to [this guide](/deprecations/to-promise).</span>
+<span class="informal">ObservableをPromiseへと変換したい時に参考になる情報についてはこちらの [こちらの案内](/deprecations/to-promise) を参照してください。</span>
 
 ## Observables as generalizations of functions
 
