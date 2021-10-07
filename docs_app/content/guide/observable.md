@@ -90,13 +90,14 @@ RxJSはJavaScriptにおける新しいプッシュ型の仕組みとしてObserv
 
 <span class="informal">ObservableをPromiseへと変換したい時に参考になる情報についてはこちらの [こちらの案内](/deprecations/to-promise) を参照してください。</span>
 
-## Observables as generalizations of functions
+## 関数の一般化としてのObservable
 
-Contrary to popular claims, Observables are not like EventEmitters nor are they like Promises for multiple values. Observables *may act* like EventEmitters in some cases, namely when they are multicasted using RxJS Subjects, but usually they don't act like EventEmitters.
+しばしば言われることとは異なり、ObservableはEventEmitterのようなものでも、複数値のためのPromiseのようなものでもありません。
+ObservableがいくつかのケースでEventEmitterのように振る舞い *得る* のは事実です。それはRxJSのSubjectを利用してマルチキャストを行うケースです。しかし一般的にはObservableはEventEmitterと異なる振る舞いをします。
 
-<span class="informal">Observables are like functions with zero arguments, but generalize those to allow multiple values.</span>
+<span class="informal">Observableは引数なしの関数に似ています。しかし関数と異なり、複数の値を生起することができます。</span>
 
-Consider the following:
+次のコードを見てみましょう；
 
 ```ts
 function foo() {
@@ -104,13 +105,13 @@ function foo() {
   return 42;
 }
 
-const x = foo.call(); // same as foo()
+const x = foo.call(); // foo()と同じ
 console.log(x);
-const y = foo.call(); // same as foo()
+const y = foo.call(); // foo() と同じ
 console.log(y);
 ```
 
-We expect to see as output:
+出力結果は次のようになるでしょう：
 
 ```none
 "Hello"
@@ -119,7 +120,7 @@ We expect to see as output:
 42
 ```
 
-You can write the same behavior above, but with Observables:
+上で示したのと同じことを、Observableを使って記述することができます:
 
 ```ts
 import { Observable } from 'rxjs';
@@ -137,7 +138,7 @@ foo.subscribe(y => {
 });
 ```
 
-And the output is the same:
+出力結果は同じです：
 
 ```none
 "Hello"
@@ -146,11 +147,15 @@ And the output is the same:
 42
 ```
 
-This happens because both functions and Observables are lazy computations. If you don't call the function, the `console.log('Hello')` won't happen. Also with Observables, if you don't "call" it (with `subscribe`), the `console.log('Hello')` won't happen. Plus, "calling" or "subscribing" is an isolated operation: two function calls trigger two separate side effects, and two Observable subscribes trigger two separate side effects. As opposed to EventEmitters which share the side effects and have eager execution regardless of the existence of subscribers, Observables have no shared execution and are lazy.
+このようになるのは、関数もObservableも、〔値が必要になるその時にまで何も起きないという点で〕遅延評価型の挙動を示すからです。
+もし関数を呼び出さなければ、 `console.log('Hello')` は実行されません。
+Observableもまた、もし （`subscribe` により）"呼び出" さなければ、 `console.log('Hello')` は実行されません。
+加えるに、"呼び出すこと（calling）" と "購読すること（subscribing）" は他から分離された処理です。つまり、2つの関数呼び出しは2つの独立した副作用を生じさせ、2つの購読（subscribe）は2つの独立した副作用を生じさせます。
+副作用を共有し、購読者の存否を考慮することなしに〔値の消費者の状態に関わらず、それ自身のペースで値を生成していくという点で〕先行評価型の挙動を示す EventEmitterとは対象的に、Observableは副作用を共有せず遅延評価型の挙動を示します。
 
-<span class="informal">Subscribing to an Observable is analogous to calling a Function.</span>
+<span class="informal">Observableを購読すること（subscribing）は関数を呼び出すこと（calling） に似ています。</span>
 
-Some people claim that Observables are asynchronous. That is not true. If you surround a function call with logs, like this:
+Observableは非同期的であるということを言う人がいます。しかしこれは正しくありません。ある関数の呼び出しコードの前後にログ出力のコードを入れるとしましょう：
 
 ```js
 console.log('before');
@@ -158,7 +163,7 @@ console.log(foo.call());
 console.log('after');
 ```
 
-You will see the output:
+結果は次のようになります：
 
 ```none
 "before"
@@ -167,7 +172,7 @@ You will see the output:
 "after"
 ```
 
-And this is the same behavior with Observables:
+そしてObservableも同じように振る舞います：
 
 ```js
 console.log('before');
@@ -177,7 +182,7 @@ foo.subscribe(x => {
 console.log('after');
 ```
 
-And the output is:
+結果は次のようになります：
 
 ```none
 "before"
@@ -186,21 +191,23 @@ And the output is:
 "after"
 ```
 
-Which proves the subscription of `foo` was entirely synchronous, just like a function.
+このことは `foo` の購読が、関数呼び出しと同じく、完全に同期的に行われることを示しています。
 
-<span class="informal">Observables are able to deliver values either synchronously or asynchronously.</span>
+<span class="informal">Observableは値を生成しますが、それは同期的に行われるもあれば非同期的に行われることもあります。</span>
 
-What is the difference between an Observable and a function? **Observables can "return" multiple values over time**, something which functions cannot. You can't do this:
+Observableと関数の違いは何でしょうか？
+**Observableは時間とともに複数の値を "返す" ことができますが**、関数はそうではありません。
+したがって次のようなことはできないのです：
 
 ```js
 function foo() {
   console.log('Hello');
   return 42;
-  return 100; // dead code. will never happen
+  return 100; // デッドコード。決して実行されません。
 }
 ```
 
-Functions can only return one value. Observables, however, can do this:
+関数は単一値を返すことしかできません。一方、Observableにはそれが可能です：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -208,8 +215,8 @@ import { Observable } from 'rxjs';
 const foo = new Observable(subscriber => {
   console.log('Hello');
   subscriber.next(42);
-  subscriber.next(100); // "return" another value
-  subscriber.next(200); // "return" yet another
+  subscriber.next(100); // 別の値を "返す"
+  subscriber.next(200); // また別の値を "返す"
 });
 
 console.log('before');
@@ -219,7 +226,7 @@ foo.subscribe(x => {
 console.log('after');
 ```
 
-With synchronous output:
+同期的な出力が得られます：
 
 ```none
 "before"
@@ -230,7 +237,7 @@ With synchronous output:
 "after"
 ```
 
-But you can also "return" values asynchronously:
+しかし値を非同期的に "返す" こともできます：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -241,7 +248,7 @@ const foo = new Observable(subscriber => {
   subscriber.next(100);
   subscriber.next(200);
   setTimeout(() => {
-    subscriber.next(300); // happens asynchronously
+    subscriber.next(300); //非同期的に実行される
   }, 1000);
 });
 
@@ -252,7 +259,7 @@ foo.subscribe(x => {
 console.log('after');
 ```
 
-With output:
+出力結果は：
 
 ```none
 "before"
@@ -264,10 +271,10 @@ With output:
 300
 ```
 
-Conclusion:
+まとめましょう:
 
-- `func.call()` means "*give me one value synchronously*"
-- `observable.subscribe()` means "*give me any amount of values, either synchronously or asynchronously*"
+- `func.call()` というコードは "*同期的に、単一の値をください*" という意味になります。
+- `observable.subscribe()` というコードは "*同期的ないし非同期的に、ある限りの値をください*" という意味になります。
 
 ## Anatomy of an Observable
 
