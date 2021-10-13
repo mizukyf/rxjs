@@ -1,20 +1,24 @@
-# RxJS Operators
+# RxJS が提供するオペレーター
 
-RxJS is mostly useful for its _operators_, even though the Observable is the foundation. Operators are the essential pieces that allow complex asynchronous code to be easily composed in a declarative manner.
+RxJSはObservableをその土台としているものの、それよりもむしろ _オペレーター_ のほうがが多くの場合に有用です。
+オペレーターは複雑な非同期処理のコードを宣言的な方法で容易に構成することを可能にするために必要不可欠な部品です。
 
-## What are operators?
+## オペレーターとは何者か？
 
-Operators are **functions**. There are two kinds of operators:
+オペレーターは **関数** です。2つの種類のオペレーターが存在します：
 
-**Pipeable Operators** are the kind that can be piped to Observables using the syntax `observableInstance.pipe(operator())`. These include, [`filter(...)`](/api/operators/filter), and [`mergeMap(...)`](/api/operators/mergeMap). When called, they do not _change_ the existing Observable instance. Instead, they return a _new_ Observable, whose subscription logic is based on the first Observable.
+**パイプライン・オペレーター** は `observableInstance.pipe(operator())` という構文でもってObservableに接続（pipe）されます。この種類のオペレーターには[`filter(...)`](/api/operators/filter) や [`mergeMap(...)`](/api/operators/mergeMap)が含まれます。
+`pipe(operator())` が呼び出される時、既存のObservableインスタンスには _変更_ は加えられません。このメソッド呼び出しはObservableを変更するのではなく、 _新しい_ Observableインスタンスを返すのです。新たなインスタンスの購読（subscription）ロジックは最初のObservableのそれに基づきます。
 
-<span class="informal">A Pipeable Operator is a function that takes an Observable as its input and returns another Observable. It is a pure operation: the previous Observable stays unmodified.</span>
+<span class="informal">パイプライン・オペレーターは関数です。既存のObservableを入力としてとり、新しい別のObservableを返します。これは副作用を伴わない処理です。つまり元のObservableは変更を受けません。</span>
 
-A Pipeable Operator is essentially a pure function which takes one Observable as input and generates another Observable as output. Subscribing to the output Observable will also subscribe to the input Observable.
+パイプライン・オペレーターは基本的に純粋な関数、つまり副作用を伴わない関数です。〔`filter(...)` や `mergeMap(...)` という関数呼び出しによりオペレーター関数が返されます。〕オペレーター関数はObservableを入力にとり、別のObservableを生成して出力します。生成された新しいObservableを購読すると、その新しいObservableを通じて、元になったObservableを購読することになります。
 
-**Creation Operators** are the other kind of operator, which can be called as standalone functions to create a new Observable. For example: `of(1, 2, 3)` creates an observable that will emit 1, 2, and 3, one right after another. Creation operators will be discussed in more detail in a later section.
+**生成オペレーター（Creation Operators）** はもう1つの種類のオペレーターです。この種類のオペレーターは新しいObservableを生成するために単独で（というのは `pipe()` と組み合わせる必要なく）呼び出すことができる関数です。
+例えば、 `of(1, 2, 3)` というオペレーター関数呼び出しにより生成されるObservableは 1、2、3 という値を次々に生起します。生成オペレーターについては後のセクションで詳しく論じます。
 
-For example, the operator called [`map`](/api/operators/map) is analogous to the Array method of the same name. Just as `[1, 2, 3].map(x => x * x)` will yield `[1, 4, 9]`, the Observable created like this:
+〔オペレーター全般の説明に話を戻しましょう。〕
+例えば、[`map`](/api/operators/map)というオペレーターは配列に備わった同名のメソッドと類似の働きをします。ちょうど配列に対する処理 `[1, 2, 3].map(x => x * x)` というコードが `[1, 4, 9]` という結果値を生成するのと同様に、mapオペレーターによりマッピングされた値を配信する新しいObservableが生成されます:
 
 ```ts
 import { of } from 'rxjs';
@@ -30,7 +34,7 @@ of(1, 2, 3)
 // value: 9
 ```
 
-will emit `1`, `4`, `9`. Another useful operator is [`first`](/api/operators/first):
+このObservableは `1`、`4`、`9`という値を生成します。もう1つ便利なオペレーター [`first`](/api/operators/first) をご紹介しましょう:
 
 ```ts
 import { of } from 'rxjs';
@@ -44,7 +48,7 @@ of(1, 2, 3)
 // value: 1
 ```
 
-Note that `map` logically must be constructed on the fly, since it must be given the mapping function to. By contrast, `first` could be a constant, but is nonetheless constructed on the fly. As a general practice, all operators are constructed, whether they need arguments or not.
+この例で注意していただきたいのは、 `map` オペレーターの場合マッピング関数を指定しないとならないのでその都度 `map(......)` という関数呼び出しを行ってオペレーターのインスタンスを構築している点です。これとは対象的に `first` オペレーターの場合は定数化して都度 `first()` という関数呼び出しをせずに済むようにすることも可能なのですが、にもかかわらずやはり `first()` 呼び出しを行っています。その構築に引数が必要であるかないかに関わらず、すべてのオペレーターは関数呼び出しにより生成するのが慣例となっています。
 
 ## Piping
 
