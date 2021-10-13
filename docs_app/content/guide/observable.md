@@ -276,21 +276,22 @@ console.log('after');
 - `func.call()` というコードは "*同期的に、単一の値をください*" という意味になります。
 - `observable.subscribe()` というコードは "*同期的ないし非同期的に、ある限りの値をください*" という意味になります。
 
-## Anatomy of an Observable
+## Observableの解剖
 
-Observables are **created** using `new Observable` or a creation operator, are **subscribed** to with an Observer, **execute** to deliver `next` / `error` / `complete` notifications to the Observer, and their execution may be **disposed**. These four aspects are all encoded in an Observable instance, but some of these aspects are related to other types, like Observer and Subscription.
+Observableは コンストラクタ（`new Observable`）や作成オペレーターにより **作成され**、Observerにより **購読され**、Observerに対して `next` / `error` / `complete` という3種類のメッセージの通知を **実行し**、そしてしばしばSubscriptionにより **破棄され** ることになります。
+これら4つの相のすべてが1つのObservableインスタンスに組み込まれています。そしていくつかの相はObserverやSubscriptionのような他の型にも関連します。
 
-Core Observable concerns:
-- **Creating** Observables
-- **Subscribing** to Observables
-- **Executing** the Observable
-- **Disposing** Observables
+Observableの中核となる概念は次の4つです:
+- Observable の**作成**
+- Observable の**購読**
+- Observable の**実行**
+- Observables の**破棄** 
 
-### Creating Observables
+### Observableの作成
 
-The `Observable` constructor takes one argument: the `subscribe` function.
+`Observable` コンストラクタは引数を一つとります： すなわち `subscribe` 関数です。
 
-The following example creates an Observable to emit the string `'hi'` every second to a subscriber.
+次に示す例では1秒ごとに  `'hi'` という文字列を生成して購読者に知らせるObservableを作成しています。
 
 ```ts
 import { Observable } from 'rxjs';
@@ -302,49 +303,56 @@ const observable = new Observable(function subscribe(subscriber) {
 });
 ```
 
-<span class="informal">Observables can be created with `new Observable`. Most commonly, observables are created using creation functions, like `of`, `from`, `interval`, etc.</span>
+<span class="informal">このように `new Observable` によりObservableを作成できます。しかしより一般的に用いられる方法として、作成オペレーター関数があります。例えば `of` や `from`、`interval` などがそれです。</span>
 
-In the example above, the `subscribe` function is the most important piece to describe the Observable. Let's look at what subscribing means.
+上で示した例では、`subscribe` 関数はObservableインスタンスの動作を定義する上でもっとも重要な部品です。それでは 購読（subscribing）の意味するところに目を向けてみましょう。
 
-### Subscribing to Observables
+### Observableを購読する
 
-The Observable `observable` in the example can be *subscribed* to, like this:
+先の例で登場したObservableのインスタンス `observable` を *購読* するには次のようにします:
 
 ```ts
 observable.subscribe(x => console.log(x));
 ```
 
-It is not a coincidence that `observable.subscribe` and `subscribe` in `new Observable(function subscribe(subscriber) {...})` have the same name. In the library, they are different, but for practical purposes you can consider them conceptually equal.
+ `observable.subscribe` メソッドと、 `new Observable(function subscribe(subscriber) {...})` の関数 `subscribe` が同じ名前を持っているのは偶然ではありません。
+ このライブラリにおいて、2つは異なる働きをしていますが、実際上概念的に同じものとみなすことができます。
 
-This shows how `subscribe` calls are not shared among multiple Observers of the same Observable. When calling `observable.subscribe` with an Observer, the function `subscribe` in `new Observable(function subscribe(subscriber) {...})` is run for that given subscriber. Each call to `observable.subscribe` triggers its own independent setup for that given subscriber.
+`subscribe` の呼び出しは、同じObservableインスタンスに対する複数のObserverの間で共有されません。
+あるObserverインスタンスとともに `observable.subscribe` メソッドを呼び出す時、`new Observable(function subscribe(subscriber) {...})`の `subscribe` 関数は当該の購読者のために実行されます。
+`observable.subscribe` メソッドの呼び出しはその都度、引数で指定された購読者のために独立したセットアップ処理を起動します。
 
-<span class="informal">Subscribing to an Observable is like calling a function, providing callbacks where the data will be delivered to.</span>
+<span class="informal">Observableを購読すること（subscribing）は関数を呼び出すこと（calling）に似て、データの配信を待つコールバックをObservableに提供します。</span>
 
-This is drastically different to event handler APIs like `addEventListener` / `removeEventListener`. With `observable.subscribe`, the given Observer is not registered as a listener in the Observable. The Observable does not even maintain a list of attached Observers.
+この点が `addEventListener` / `removeEventListener` のようなイベントハンドラAPIと大きく違うところです。
+ `observable.subscribe` メソッドはObserverをイベントリスナーのようなものとしてObservableに登録するのではありません。
+ Observableは自身に関連付けられたObserverの一覧を保持するわけでもありません。
 
-A `subscribe` call is simply a way to start an "Observable execution" and deliver values or events to an Observer of that execution.
+`subscribe` メソッド呼び出しは単純に "Observableの実行" を開始させ、その実行を観察するObserverに値やイベントを通知するのを開始させる方法に過ぎません。
 
-### Executing Observables
+### Observableを実行する
 
-The code inside `new Observable(function subscribe(subscriber) {...})` represents an "Observable execution", a lazy computation that only happens for each Observer that subscribes. The execution produces multiple values over time, either synchronously or asynchronously.
+先程の `new Observable(function subscribe(subscriber) {...})` というコードの内側、subscribe関数の部分は "Observableの実行"
+を表現しています。この部分は各Observerがそれを購読しない限り実行されません。ひとたび実行されると時間とともに、同期的ないし非同期的な方法で複数の値が生成されます。
 
-There are three types of values an Observable Execution can deliver:
+Observableの実行によりObserverに届けられる通知には3つの種類があります：
 
-- "Next" notification: sends a value such as a Number, a String, an Object, etc.
-- "Error" notification: sends a JavaScript Error or exception.
-- "Complete" notification: does not send a value.
+- "Next" 通知: 数値や文字列、オブジェクトなどが送信されます。
+- "Error" 通知: JavaScriptエラーないし例外が送信されます。
+- "Complete" 通知: 値は送信されません。
 
-"Next" notifications are the most important and most common type: they represent actual data being delivered to a subscriber. "Error" and "Complete" notifications may happen only once during the Observable Execution, and there can only be either one of them.
+なかでも "Next" 通知はもっとも重要なものであり、もっともよく用いられるものです。この通知により実際のデータが購読者に送信されます。 "Error" 通知と "Complete" 通知はObservableの実行中に1回だけ、それも "Error" と "Complete" のいずれかのみ、行われる可能性があります。
 
-These constraints are expressed best in the so-called *Observable Grammar* or *Contract*, written as a regular expression:
+この制限は 正規表現で記述された *Observable グラマー（文法）* ないし *Observableコントラクト（契約）* と呼ばれるもので端的に表されます：
 
 ```none
 next*(error|complete)?
 ```
 
-<span class="informal">In an Observable Execution, zero to infinite Next notifications may be delivered. If either an Error or Complete notification is delivered, then nothing else can be delivered afterwards.</span>
+<span class="informal">Observableが実行されるとき、Next通知はゼロ個で終わることもあれば一回だけ、複数回、そして無限回にわたり行われることもあります。ひとたびError通知ないしComplete通知が行われると、その後はいかなる通知も行われません。
+</span>
 
-The following is an example of an Observable execution that delivers three Next notifications, then completes:
+次の例では、Observableインスタンスが3つのNext通知を送信したあと、Complete通知を送信して完了します：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -357,7 +365,7 @@ const observable = new Observable(function subscribe(subscriber) {
 });
 ```
 
-Observables strictly adhere to the Observable Contract, so the following code would not deliver the Next notification `4`:
+ObservableはObservableコントラクトをきっちり遵守します。次のコードでは `4` という値はNext通知されません：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -367,11 +375,11 @@ const observable = new Observable(function subscribe(subscriber) {
   subscriber.next(2);
   subscriber.next(3);
   subscriber.complete();
-  subscriber.next(4); // Is not delivered because it would violate the contract
+  subscriber.next(4); // この操作はコントラクトに違反するので通知を発生させません
 });
 ```
 
-It is a good idea to wrap any code in `subscribe` with `try`/`catch` block that will deliver an Error notification if it catches an exception:
+`subscribe` 関数のコードを `try`/`catch` ブロックで囲うのはよい考えです。このブロックにより例外が発生したときError通知を送るのです：
 
 ```ts
 import { Observable } from 'rxjs';
@@ -383,22 +391,22 @@ const observable = new Observable(function subscribe(subscriber) {
     subscriber.next(3);
     subscriber.complete();
   } catch (err) {
-    subscriber.error(err); // delivers an error if it caught one
+    subscriber.error(err); // エラーが発生したらそれを通知する
   }
 });
 ```
 
-### Disposing Observable Executions
+### Observable実行の破棄
 
-Because Observable Executions may be infinite, and it's common for an Observer to want to abort execution in finite time, we need an API for canceling an execution. Since each execution is exclusive to one Observer only, once the Observer is done receiving values, it has to have a way to stop the execution, in order to avoid wasting computation power or memory resources.
+Observableの実行は半永久的に継続しうるので、Observer側でこれを停止させたいということもしばしばあります。そういうわけで実行をキャンセルするAPIが必要になります。Observableの実行はみな特定の1 Observerごとにそれ専用の処理として行われるので、ひとたびObserverが値の受信を終えたら、CPUやメモリのリソースの浪費を避けるため、Observableの実行をストップさせるべきです。
 
-When `observable.subscribe` is called, the Observer gets attached to the newly created Observable execution. This call also returns an object, the `Subscription`:
+ `observable.subscribe` メソッドを呼び出した時、Observerは新たに生成されたObservable実行〔を表すオブジェクト〕に紐付けられます。そしてこのメソッド呼び出しは `Subscription` というオブジェクトを返します：
 
 ```ts
 const subscription = observable.subscribe(x => console.log(x));
 ```
 
-The Subscription represents the ongoing execution, and has a minimal API which allows you to cancel that execution. Read more about the [`Subscription` type here](./guide/subscription). With `subscription.unsubscribe()` you can cancel the ongoing execution:
+Subscription（購読）オブジェクトは今まさに進行中のObservable実行を表し、その実行をキャンセルするための最小限のAPIを提供します。より詳しい[`Subscription` 型の説明はこちら](./guide/subscription) を参照ください。 `subscription.unsubscribe()` メソッドを使って進行中のObservable実行をキャンセルできます：
 
 ```ts
 import { from } from 'rxjs';
@@ -409,27 +417,28 @@ const subscription = observable.subscribe(x => console.log(x));
 subscription.unsubscribe();
 ```
 
-<span class="informal">When you subscribe, you get back a Subscription, which represents the ongoing execution. Just call `unsubscribe()` to cancel the execution.</span>
+<span class="informal">Observableの購読を開始したとき、そのObservableの実行を表すSubscriptionが得られます。 `unsubscribe()` 呼び出しをすることでこの実行をキャンセルすることができます。</span>
 
-Each Observable must define how to dispose resources of that execution when we create the Observable using `create()`. You can do that by returning a custom `unsubscribe` function from within `function subscribe()`.
+ `create()`オペレーターを使用してObservableインスタンスを作成するとき、そのObservableの実行中に使用したリソースを破棄する方法を定義することができます。それには `function subscribe()` の中で `unsubscribe` 関数を返します。〔これはnew演算子でObservableインスタンスを生成するときも同じです。〕
 
-For instance, this is how we clear an interval execution set with `setInterval`:
+例えば、これはその内部で `setInterval` を使用するObservableに、定期実行をクリアさせてみましょう：
 
 ```js
 const observable = new Observable(function subscribe(subscriber) {
-  // Keep track of the interval resource
+  // 定期実行のためのリソースを追跡しておく
   const intervalId = setInterval(() => {
     subscriber.next('hi');
   }, 1000);
 
-  // Provide a way of canceling and disposing the interval resource
+  // 定期実行をキャンセルしリソースを破棄する方法を提供する
   return function unsubscribe() {
     clearInterval(intervalId);
   };
 });
 ```
 
-Just like `observable.subscribe` resembles `new Observable(function subscribe() {...})`, the `unsubscribe` we return from `subscribe` is conceptually equal to `subscription.unsubscribe`. In fact, if we remove the ReactiveX types surrounding these concepts, we're left with rather straightforward JavaScript.
+ちょうど `observable.subscribe` が `new Observable(function subscribe() {...})` と共通点を持つように、 `subscribe` から返される `unsubscribe` は `subscription.unsubscribe` と概念的に同じものです。
+事実、この概念の周囲を取り囲んでいるReactiveXが提供する型を取り除いてしまうと、われわれの手元にはかなりシンプルなJavaScriptコードが残ります。
 
 ```js
 function subscribe(subscriber) {
@@ -444,8 +453,8 @@ function subscribe(subscriber) {
 
 const unsubscribe = subscribe({next: (x) => console.log(x)});
 
-// Later:
-unsubscribe(); // dispose the resources
+// 後に実行されるコード：
+unsubscribe(); // リソースを破棄
 ```
 
-The reason why we use Rx types like Observable, Observer, and Subscription is to get safety (such as the Observable Contract) and composability with Operators.
+〔こうして実際に行われていることを突き詰めればごくシンプルなものでありながら、それでもあえて〕 ObservableやObserver、SubscriptionといったReactiveXの型を使ってそれを行う理由は、（Observableコントラクトが購読する側とされる側のコミュニケーション方法を定義するような方法で）安全にそれを実現できるからであり、かつまた、オペレーターの助けによりロジックの組み立てが容易になるからです。
