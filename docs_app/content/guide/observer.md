@@ -12,7 +12,7 @@ const observer = {
 };
 ```
 
-こうして定義したObserverを使用するには、それをObservableの `subscribe` メソッドに与えます：
+こうして定義したObserverを使用するには、それをObservableの `subscribe` メソッドに渡します：
 
 ```ts
 observable.subscribe(observer);
@@ -20,7 +20,7 @@ observable.subscribe(observer);
 
 <span class="informal">Observerは3つのコールバック関数を持つオブジェクトに過ぎません。コールバック関数のそれぞれはObservableが配信する可能性のある3つのタイプの通知のそれぞれに対応するものです。</span>
 
-RxJSにおいてはObserverは *一部分だけ* のものでも構いません。コールバック関数のうち1つを提供しなかったとしても、Observableは普通に実行されます。Observerが提供しなかったコールバック関数に対応する通知が無視されるだけです。
+RxJSにおいてはObserverは *部分的なもの* でも構いません。コールバック関数のうち1つを提供しなかったとしても、Observableは普通に実行されます。Observerが提供しなかったコールバック関数に対応する通知が無視されるだけです。
 
 次のコードは `complete` 通知に対応するコールバック関数が省略された `Observer` の例です:
 
