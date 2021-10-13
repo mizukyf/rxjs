@@ -8,13 +8,13 @@ RxJSはObservableをその土台としているものの、それよりもむし
 オペレーターは **関数** です。2つの種類のオペレーターが存在します：
 
 **パイプ可能オペレーター（Pipeable Operators）** は `observableInstance.pipe(operator())` という構文でもってObservableに接続（pipe）されます。この種類のオペレーターには[`filter(...)`](/api/operators/filter) や [`mergeMap(...)`](/api/operators/mergeMap)が含まれます。
-`pipe(operator())` が呼び出される時、既存のObservableインスタンスには _変更_ は加えられません。このメソッド呼び出しはObservableを変更するのではなく、 _新しい_ Observableインスタンスを返すのです。新たなインスタンスの購読（subscription）ロジックは最初のObservableのそれに基づきます。
+`pipe(operator())` が呼び出される時、既存のObservableインスタンスに _変更_ は加えられません。このメソッド呼び出しはObservableを変更するのではなく、 _新しい_ Observableインスタンスを返すのです。新たなインスタンスの購読（subscription）ロジックは最初のObservableのそれに基づきます。
 
-<span class="informal">パイプライン・オペレーターは関数です。既存のObservableを入力としてとり、新しい別のObservableを返します。これは副作用を伴わない処理です。つまり元のObservableは変更を受けません。</span>
+<span class="informal">パイプ可能オペレーターは関数です。既存のObservableを入力としてとり、新しい別のObservableを返します。これは副作用を伴わない処理です。つまり元のObservableは変更を受けません。</span>
 
-パイプライン・オペレーターは基本的に純粋な関数、つまり副作用を伴わない関数です。〔`filter(...)` や `mergeMap(...)` という関数呼び出しによりオペレーター関数が返されます。〕オペレーター関数はObservableを入力にとり、別のObservableを生成して出力します。生成された新しいObservableを購読すると、その新しいObservableを通じて、元になったObservableを購読することになります。
+パイプ可能オペレーターは基本的に純粋な関数、つまり副作用を伴わない関数です。〔`filter(...)` や `mergeMap(...)` という関数呼び出しによりオペレーター関数が返されます。〕オペレーター関数はObservableを入力にとり、別のObservableを生成して出力します。生成された新しいObservableを購読すると、その新しいObservableを通じて、元になったObservableを購読することになります。
 
-**生成オペレーター（Creation Operators）** はもう1つの種類のオペレーターです。この種類のオペレーターは新しいObservableを生成するために単独で（というのは `pipe()` と組み合わせる必要なく）呼び出すことができる関数です。
+**生成オペレーター（Creation Operators）** はもう1つの種類のオペレーターです。この種類のオペレーターは新しいObservableを生成するために単独で〔というのは `pipe()` を使って既存のObservableと組み合わせる必要なく〕呼び出すことができる関数です。
 例えば、 `of(1, 2, 3)` というオペレーター関数呼び出しにより生成されるObservableは 1、2、3 という値を次々に生起します。生成オペレーターについては後のセクションで詳しく論じます。
 
 〔オペレーター全般の説明に話を戻しましょう。〕
