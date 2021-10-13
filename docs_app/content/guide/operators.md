@@ -7,7 +7,7 @@ RxJSはObservableをその土台としているものの、それよりもむし
 
 オペレーターは **関数** です。2つの種類のオペレーターが存在します：
 
-**パイプライン・オペレーター** は `observableInstance.pipe(operator())` という構文でもってObservableに接続（pipe）されます。この種類のオペレーターには[`filter(...)`](/api/operators/filter) や [`mergeMap(...)`](/api/operators/mergeMap)が含まれます。
+**パイプ可能オペレーター（Pipeable Operators）** は `observableInstance.pipe(operator())` という構文でもってObservableに接続（pipe）されます。この種類のオペレーターには[`filter(...)`](/api/operators/filter) や [`mergeMap(...)`](/api/operators/mergeMap)が含まれます。
 `pipe(operator())` が呼び出される時、既存のObservableインスタンスには _変更_ は加えられません。このメソッド呼び出しはObservableを変更するのではなく、 _新しい_ Observableインスタンスを返すのです。新たなインスタンスの購読（subscription）ロジックは最初のObservableのそれに基づきます。
 
 <span class="informal">パイプライン・オペレーターは関数です。既存のObservableを入力としてとり、新しい別のObservableを返します。これは副作用を伴わない処理です。つまり元のObservableは変更を受けません。</span>
