@@ -2,39 +2,39 @@
 
 **Observerとは何者でしょうか？** ObserverはObservableから配信されるデータの消費者です。
 ObserverはObservableから配信される 通知の各タイプ── `next`、`error`、`complete`──のそれぞれに対応するコールバック関数のセットです。
-次に示すのは典型的なObserverオブジェクトの例です：
+次に示すのは典型的なObserverオブジェクトの定義の例です：
 
 ```ts
 const observer = {
-  next: x => console.log('Observer got a next value: ' + x),
-  error: err => console.error('Observer got an error: ' + err),
-  complete: () => console.log('Observer got a complete notification'),
+  next: x => console.log('Observerが次の値を取得: ' + x),
+  error: err => console.error('Observerがエラーを取得: ' + err),
+  complete: () => console.log('Observerが完了の通知を取得'),
 };
 ```
 
-To use the Observer, provide it to the `subscribe` of an Observable:
+こうして定義したObserverを使用するには、それをObservableの `subscribe` メソッドに与えます：
 
 ```ts
 observable.subscribe(observer);
 ```
 
-<span class="informal">Observers are just objects with three callbacks, one for each type of notification that an Observable may deliver.</span>
+<span class="informal">Observerは3つのコールバック関数を持つオブジェクトに過ぎません。コールバック関数のそれぞれはObservableが配信する可能性のある3つのタイプの通知のそれぞれに対応するものです。</span>
 
-Observers in RxJS may also be *partial*. If you don't provide one of the callbacks, the execution of the Observable will still happen normally, except some types of notifications will be ignored, because they don't have a corresponding callback in the Observer.
+RxJSにおいてはObserverは *一部分だけ* のものでも構いません。コールバック関数のうち1つを提供しなかったとしても、Observableは普通に実行されます。Observerが提供しなかったコールバック関数に対応する通知が無視されるだけです。
 
-The example below is an `Observer` without the `complete` callback:
+次のコードは `complete` 通知に対応するコールバック関数が省略された `Observer` の例です:
 
 ```ts
 const observer = {
-  next: x => console.log('Observer got a next value: ' + x),
-  error: err => console.error('Observer got an error: ' + err),
+  next: x => console.log('Observerが次の値を取得: ' + x),
+  error: err => console.error('Observerがエラーを取得: ' + err),
 };
 ```
 
-When subscribing to an `Observable`, you may also just provide the next callback as an argument, without being attached to an `Observer` object, for instance like this:
+`Observable` を購読するとき、`next` 通知に対応するコールバック関数だけを引数として渡すこともできます。`Observer` オブジェクトに関連付けされていない、単なる一個の関数を渡すということです。例えば次のように：
 
 ```ts
 observable.subscribe(x => console.log('Observer got a next value: ' + x));
 ```
 
-Internally in `observable.subscribe`, it will create an `Observer` object using the callback argument as the `next` handler.
+`observable.subscribe` メソッドの内部では、引数で渡された`next` のコールバック関数を用いて `Observer` オブジェクトが生成されます。
