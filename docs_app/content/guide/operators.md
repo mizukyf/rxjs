@@ -61,19 +61,19 @@ observer.pipe(op1(), op2(), op3(), op4());
 
 コーディング・スタイルとして、たとえ単一のオペレーターしかない場合でも `op()(observer)` の形式はとらず、 `observer.pipe(op())` の形式をとることが、一般に好ましいものとされています。
 
-## 作成オペレーター
+## 生成オペレーター
 
-**What are creation operators?** Distinct from pipeable operators, creation operators are functions that can be used to create an Observable with some common predefined behavior or by joining other Observables.
+**生成オペレーターとは何者でしょうか？** パイプ可能オペレーターと違い、生成オペレーターはいくつかのお決まりの挙動を示すObservableや、複数のObservableを連結した新たなObservableを生成するのに使用します。
 
-A typical example of a creation operator would be the `interval` function. It takes a number (not an Observable) as input argument, and produces an Observable as output:
+生成オペレーターの典型的な例は `interval` 関数です。この関数は引数として（Observableではなく）数値をとり、Observableを生成して返します：
 
 ```ts
 import { interval } from 'rxjs';
 
-const observable = interval(1000 /* number of milliseconds */);
+const observable = interval(1000 /* ミリ秒 */);
 ```
 
-See the list of all static creation operators [here](#creation-operators-list).
+すべての生成オペレーターの一覧は [こちら](#creation-operators-list) にあります。
 
 ## Higher-order Observables
 
