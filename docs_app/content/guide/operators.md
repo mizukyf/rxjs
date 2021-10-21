@@ -50,17 +50,18 @@ of(1, 2, 3)
 
 この例で注意していただきたいのは、 `map` オペレーターの場合マッピング関数を指定しないとならないのでその都度 `map(......)` という関数呼び出しを行ってオペレーターのインスタンスを構築している点です。これとは対象的に `first` オペレーターの場合は定数化して都度 `first()` という関数呼び出しをせずに済むようにすることも可能なのですが、にもかかわらずやはり `first()` 呼び出しを行っています。その構築に引数が必要であるかないかに関わらず、すべてのオペレーターは関数呼び出しにより生成するのが慣例となっています。
 
-## Piping
+## パイプ処理
 
-Pipeable operators are functions, so they _could_ be used like ordinary functions: `op()(obs)` — but in practice, there tend to be many of them convolved together, and quickly become unreadable: `op4()(op3()(op2()(op1()(obs))))`. For that reason, Observables have a method called `.pipe()` that accomplishes the same thing while being much easier to read:
+パイプ可能オペレーターは関数なので、それらを `op()(observer)` のように通常の関数として使用することも _できる_ のですが、実際にそれを行うと呼び出しの入れ子が深くなりがちで、すぐさま `op4()(op3()(op2()(op1()(observer))))` のような可読性の低いコードになってしまいます。
+このため、Observableは `.pipe()` というメソッドを提供しています。このメソッドは先程の関数呼び出しと同じことをより可読性の高いコードで実現できるようにしてくれています：
 
 ```ts
-obs.pipe(op1(), op2(), op3(), op4());
+observer.pipe(op1(), op2(), op3(), op4());
 ```
 
-As a stylistic matter, `op()(obs)` is never used, even if there is only one operator; `obs.pipe(op())` is universally preferred.
+コーディング・スタイルとして、たとえ単一のオペレーターしかない場合でも `op()(observer)` の形式はとらず、 `observer.pipe(op())` の形式をとることが、一般に好ましいものとされています。
 
-## Creation Operators
+## 作成オペレーター
 
 **What are creation operators?** Distinct from pipeable operators, creation operators are functions that can be used to create an Observable with some common predefined behavior or by joining other Observables.
 
