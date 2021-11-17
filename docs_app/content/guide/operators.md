@@ -75,17 +75,18 @@ const observable = interval(1000 /* ミリ秒 */);
 
 すべての生成オペレーターの一覧は [こちら](#creation-operators-list) にあります。
 
-## Higher-order Observables
+## 高階Observable
 
-Observables most commonly emit ordinary values like strings and numbers, but surprisingly often, it is necessary to handle Observables _of_ Observables, so-called higher-order Observables. For example, imagine you had an Observable emitting strings that were the URLs of files you wanted to see. The code might look like this:
+Observableはふつう文字列や数値のシーケンスを生み出します。ところで意外に思われるかもしれませんが、しばしば Observable _の_ Observable 〔Observableのシーケンスを生み出すObservable〕を処理することが必要になります。このようなObservableのことを高階Observableと呼びます。
+例えば、文字列のシーケンスを生み出すObservableがあったとしましょう。その文字列はファイルを指すURLで、あなたはそのファイルの内容を参照する必要があります。コードは次のようになるでしょう：
 
 ```ts
 const fileObservable = urlObservable.pipe(map((url) => http.get(url)));
 ```
+`http.get()` は個々のURLについて、文字列ないし文字列の配列を生み出すObservableを返します。
+かくして、あなたは Observable _の_ Observable、つまり高階Observableを手に入れました。
 
-`http.get()` returns an Observable (of string or string arrays probably) for each individual URL. Now you have an Observable _of_ Observables, a higher-order Observable.
-
-But how do you work with a higher-order Observable? Typically, by _flattening_: by (somehow) converting a higher-order Observable into an ordinary Observable. For example:
+高階Observableを処理するにははどうしたらよいのでしょうか？　一般的には _平坦化_ を行います。つまり、どうにかして高階ObservableをただのObservableに変換するのです。例えば：
 
 ```ts
 const fileObservable = urlObservable.pipe(
@@ -94,13 +95,14 @@ const fileObservable = urlObservable.pipe(
 );
 ```
 
-The [`concatAll()`](/api/operators/concatAll) operator subscribes to each "inner" Observable that comes out of the "outer" Observable, and copies all the emitted values until that Observable completes, and goes on to the next one. All of the values are in that way concatenated. Other useful flattening operators (called [_join operators_](#join-operators)) are
+[`concatAll()`](/api/operators/concatAll) オペレーターは "外側の" Observableから生成される "内側の" Observableを1つずつ購読していきます。 1つ目の "内側の" Observableが生成する値をすべて読み取ってコピーしら、2つ目の "内側の" Observableに取り掛かります。すべての値は連結されます。他の便利な _平坦化_ のオペレーターには次のようなものがあります（これらは [_結合オペレーター_](#join-operators) と呼ばれています）：
 
-- [`mergeAll()`](/api/operators/mergeAll) — subscribes to each inner Observable as it arrives, then emits each value as it arrives
-- [`switchAll()`](/api/operators/switchAll) — subscribes to the first inner Observable when it arrives, and emits each value as it arrives, but when the next inner Observable arrives, unsubscribes to the previous one, and subscribes to the new one.
-- [`exhaustAll()`](/api/operators/exhaustAll) — subscribes to the first inner Observable when it arrives, and emits each value as it arrives, discarding all newly arriving inner Observables until that first one completes, then waits for the next inner Observable.
+- [`mergeAll()`](/api/operators/mergeAll) — 内側のObservableを受信する都度それを購読し、それらのObservableから値を受信する都度それを自身の購読者に向けて送信します。〔複数のObservableを並行的に購読し、それらから生成される値のシーケンスを、単一のシーケンスに統合します。〕
+- [`switchAll()`](/api/operators/switchAll) — 1つ目の内側のObservableを受信するとそれを購読し、そのObservableから値を受信する都度それを自身の購読者に向けて送信します。しかし2つ目の内側のObservableを受信すると1つ目のObservableの購読を取りやめます。そして新しいObservableを購読します。
+- [`exhaustAll()`](/api/operators/exhaustAll) — 
+1つ目の内側のObservableを受信するとそれを購読し、そのObservableから値を受信する都度それを自身の購読者に向けて送信します。処理中の内側のObservableが完了するまでの間は新たな内側のObservableは受信しても破棄します。完了したら次の内側のObservableの到着を待機します。
 
-Just as many array libraries combine [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [`flat()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) (or `flatten()`) into a single [`flatMap()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap), there are mapping equivalents of all the RxJS flattening operators [`concatMap()`](/api/operators/concatMap), [`mergeMap()`](/api/operators/mergeMap), [`switchMap()`](/api/operators/switchMap), and [`exhaustMap()`](/api/operators/exhaustMap).
+多くの配列処理ライブラリーが [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) と [`flat()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) （ないし `flatten()` ）を結びつけた [`flatMap()`] を提供しているのと同じように、RxJSのすべての平坦化オペレーターのマッピング版が存在します。 [`concatMap()`](/api/operators/concatMap)と [`mergeMap()`](/api/operators/mergeMap)、 [`switchMap()`](/api/operators/switchMap)と [`exhaustMap()`](/api/operators/exhaustMap)がそれです。
 
 ## Marble diagrams
 
