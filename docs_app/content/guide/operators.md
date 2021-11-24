@@ -104,17 +104,25 @@ const fileObservable = urlObservable.pipe(
 
 多くの配列処理ライブラリーが [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) と [`flat()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) （ないし `flatten()` ）を結びつけた [`flatMap()`] を提供しているのと同じように、RxJSのすべての平坦化オペレーターのマッピング版が存在します。 [`concatMap()`](/api/operators/concatMap)と [`mergeMap()`](/api/operators/mergeMap)、 [`switchMap()`](/api/operators/switchMap)と [`exhaustMap()`](/api/operators/exhaustMap)がそれです。
 
-## Marble diagrams
+## マーブル・ダイアグラム
 
-To explain how operators work, textual descriptions are often not enough. Many operators are related to time, they may for instance delay, sample, throttle, or debounce value emissions in different ways. Diagrams are often a better tool for that. _Marble Diagrams_ are visual representations of how operators work, and include the input Observable(s), the operator and its parameters, and the output Observable.
+オペレーターがどのように機能するかを説明するのに、文章による説明は不十分であることがしばしばです。多くのオペレーターの動作は時間経過と関係しており、例えば、遅延、値の取捨選択、流速の調節、それからデバウンス〔負荷軽減や誤作動抑止のため、短時間に高頻度に起こる値の発生を1つの値の発生にまとめること〕について、各オペレーターはそれぞれのやり方を持っています。
+これらを説明する上でダイアグラムはしばしば有用なツールとなります。 _マーブル・ダイアグラム_ はオペレーターがどのように機能するかを視覚的に表現したものです。図中には入力となるObservable、オペレーターとそのパラメーター、そして出力となるObservableが示されています。
 
-<span class="informal">In a marble diagram, time flows to the right, and the diagram describes how values ("marbles") are emitted on the Observable execution.</span>
+<span class="informal">マーブル・ダイアグラムの中では、時間は右方向に流れ、Observableの実行に伴ってどのように値（これが "マーブル"、ビー玉です）が生成されるかが示されます。</span>
 
-Below you can see the anatomy of a marble diagram.
+以下の図によってマーブル・ダイアグラムの構造を理解できるでしょう。
 
 <img src="../../assets/images/guide/marble-diagram-anatomy.svg">
 
-Throughout this documentation site, we extensively use marble diagrams to explain how operators work. They may be really useful in other contexts too, like on a whiteboard or even in our unit tests (as ASCII diagrams).
+〔左上〕左から右に進む時間の流れ。オペレーターの入力となるObservableの実行を表す。
+〔中央上〕Observableにより生成される値。
+〔右上〕垂直線は完了の通知と、Observableが正常に終了したことを示す。
+〔右中〕矩形はオペレーターを表す。オペレーターは上段に記述されたObservableを入力に取り、下段に記述されたObservableを出力する。矩形の内側のテキストはデータ変換の性質を示す。
+〔左下〕オペレーターの出力となるObservable。
+〔中央下〕Xはエラーの通知と、Observableが異常終了したことを示す。これ以降いかなる値の生成も通知も行われない。
+
+このドキュメントの中ではオペレーターの動き方を説明するため多くのマーブル・ダイアグラムを用います。これらの図は他の文脈、例えばホワイトボードに書いたりできるのはもちろん（ASCIIダイアグラムの形で）単体テストの中でも活用できます。
 
 ## Categories of operators
 
