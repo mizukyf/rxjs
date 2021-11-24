@@ -113,7 +113,7 @@ const fileObservable = urlObservable.pipe(
 
 以下の図によってマーブル・ダイアグラムの構造を理解できるでしょう。
 
-<img src="../../assets/images/guide/marble-diagram-anatomy.svg">
+<img src="../../src/assets/images/guide/marble-diagram-anatomy.svg">
 
 〔左上〕左から右に進む時間の流れ。オペレーターの入力となるObservableの実行を表す。
 〔中央上〕Observableにより生成される値。
