@@ -124,13 +124,13 @@ const fileObservable = urlObservable.pipe(
 
 このドキュメントの中ではオペレーターの動き方を説明するため多くのマーブル・ダイアグラムを用います。これらの図は他の文脈、例えばホワイトボードに書いたりできるのはもちろん（ASCIIダイアグラムの形で）単体テストの中でも活用できます。
 
-## Categories of operators
+## オペレーターのカテゴリー
 
-There are operators for different purposes, and they may be categorized as: creation, transformation, filtering, joining, multicasting, error handling, utility, etc. In the following list you will find all the operators organized in categories.
+種々の目的ごとにオペレーターが存在しますが、それらは次のように分類できます： 生成、変換、フィルタリング、結合、マルチキャスティング、エラーハンドリング、ユーティリティなどなど。次のリストはこれらのカテゴリーで整理されたオペレーターの一覧です。
 
-For a complete overview, see the [references page](/api).
+完全な概観が必要な方は [リファレンス](/api)を参照してください。
 
-### <a id="creation-operators-list"></a>Creation Operators
+### <a id="creation-operators-list"></a>生成オペレーター
 
 - [`ajax`](/api/ajax/ajax)
 - [`bindCallback`](/api/index/function/bindCallback)
@@ -148,9 +148,9 @@ For a complete overview, see the [references page](/api).
 - [`timer`](/api/index/function/timer)
 - [`iif`](/api/index/function/iif)
 
-### <a id="join-creation-operators"></a>Join Creation Operators
+### <a id="join-creation-operators"></a>結合生成オペレーター
 
-These are Observable creation operators that also have join functionality -- emitting values of multiple source Observables.
+生成オペレーターの中には結合の機能も有するものもあります。これらのオペレーターから生成されるObservableは、複数のObservableを元にして値を生み出します。
 
 - [`combineLatest`](/api/index/function/combineLatest)
 - [`concat`](/api/index/function/concat)
@@ -160,7 +160,7 @@ These are Observable creation operators that also have join functionality -- emi
 - [`race`](/api/index/function/race)
 - [`zip`](/api/index/function/zip)
 
-### Transformation Operators
+### 変換オペレーター
 
 - [`buffer`](/api/operators/buffer)
 - [`bufferCount`](/api/operators/bufferCount)
@@ -191,7 +191,7 @@ These are Observable creation operators that also have join functionality -- emi
 - [`windowToggle`](/api/operators/windowToggle)
 - [`windowWhen`](/api/operators/windowWhen)
 
-### Filtering Operators
+### フィルタリング・オペレーター
 
 - [`audit`](/api/operators/audit)
 - [`auditTime`](/api/operators/auditTime)
@@ -219,9 +219,9 @@ These are Observable creation operators that also have join functionality -- emi
 - [`throttle`](/api/operators/throttle)
 - [`throttleTime`](/api/operators/throttleTime)
 
-### <a id="join-operators"></a>Join Operators
+### <a id="join-operators"></a>結合オペレーター
 
-Also see the [Join Creation Operators](#join-creation-operators) section above.
+結合オペレーターについては上方の [結合生成オペレーター](#join-creation-operators) のセクションもご確認ください。
 
 - [`combineLatestAll`](/api/operators/combineLatestAll)
 - [`concatAll`](/api/operators/concatAll)
@@ -231,7 +231,7 @@ Also see the [Join Creation Operators](#join-creation-operators) section above.
 - [`startWith`](/api/operators/startWith)
 - [`withLatestFrom`](/api/operators/withLatestFrom)
 
-### Multicasting Operators
+### マルチキャスティング・オペレーター
 
 - [`multicast`](/api/operators/multicast)
 - [`publish`](/api/operators/publish)
@@ -240,13 +240,13 @@ Also see the [Join Creation Operators](#join-creation-operators) section above.
 - [`publishReplay`](/api/operators/publishReplay)
 - [`share`](/api/operators/share)
 
-### Error Handling Operators
+### エラーハンドリング・オペレーター
 
 - [`catchError`](/api/operators/catchError)
 - [`retry`](/api/operators/retry)
 - [`retryWhen`](/api/operators/retryWhen)
 
-### Utility Operators
+### ユーティリティ・オペレーター
 
 - [`tap`](/api/operators/tap)
 - [`delay`](/api/operators/delay)
@@ -261,7 +261,7 @@ Also see the [Join Creation Operators](#join-creation-operators) section above.
 - [`timeoutWith`](/api/operators/timeoutWith)
 - [`toArray`](/api/operators/toArray)
 
-### Conditional and Boolean Operators
+### 条件的および真偽値オペレーター
 
 - [`defaultIfEmpty`](/api/operators/defaultIfEmpty)
 - [`every`](/api/operators/every)
@@ -269,20 +269,20 @@ Also see the [Join Creation Operators](#join-creation-operators) section above.
 - [`findIndex`](/api/operators/findIndex)
 - [`isEmpty`](/api/operators/isEmpty)
 
-### Mathematical and Aggregate Operators
+### 算術的および集計オペレーター
 
 - [`count`](/api/operators/count)
 - [`max`](/api/operators/max)
 - [`min`](/api/operators/min)
 - [`reduce`](/api/operators/reduce)
 
-## Creating custom operators
+## カスタム・オペレーターの作成
 
-### Use the `pipe()` function to make new operators
+### `pipe()` 関数を利用して新しいオペレーターを作成する
 
-If there is a commonly used sequence of operators in your code, use the `pipe()` function to extract the sequence into a new operator. Even if a sequence is not that common, breaking it out into a single operator can improve readability.
+もしあなたのコードの中に頻繁に登場するオペレーターのシーケンスが存在する場合には、`pipe()` 関数を使うことでそのシーケンスを新しい1つのオペレーターとして括り出すことができます。頻繁に登場するものでなくても、括り出しをすることで可読性が向上する可能性があります。
 
-For example, you could make a function that discarded odd values and doubled even values like this:
+例えば、数値のシーケンスをとって、その中から奇数を取り除き、偶数を二倍にするオペレーターは次のようにして作ることができます：
 
 ```ts
 import { pipe } from 'rxjs';
@@ -296,11 +296,12 @@ function discardOddDoubleEven() {
 }
 ```
 
-(The `pipe()` function is analogous to, but not the same thing as, the `.pipe()` method on an Observable.)
+（`pipe()` 関数は Observableの `.pipe()` メソッド
+と同一ではないものの類似した働きをします。）
 
-### Creating new operators from scratch
+### 一から新しいオペレーターを作成する
 
-It is more complicated, but if you have to write an operator that cannot be made from a combination of existing operators (a rare occurrance), you can write an operator from scratch using the Observable constructor, like this:
+これより複雑にはなりますが、しかし既存のオペレーターの組み合わせでは必要とするオペレーターが得られない場合（稀にそういうこともあります）、Observableのコンストラクターを利用することで一から新しいオペレーターを作成することができます：
 
 ```ts
 import { Observable, of } from 'rxjs';
@@ -308,20 +309,19 @@ import { Observable, of } from 'rxjs';
 function delay<T>(delayInMillis: number) {
   return (observable: Observable<T>) =>
     new Observable<T>((subscriber) => {
-      // this function will be called each time this
-      // Observable is subscribed to.
+      // 新しく生成されるObservableが購読されるとき、
+      // その都度この関数が呼び出される。
       const allTimerIDs = new Set();
       let hasCompleted = false;
       const subscription = observable.subscribe({
         next(value) {
-          // Start a timer to delay the next value
-          // from being pushed.
+          // 次の値の処理を遅延させるためのタイマーをスタート
           const timerID = setTimeout(() => {
             subscriber.next(value);
-            // after we push the value, we need to clean up the timer timerID
+            // 値をプッシュしたら、タイマーIDをクリーンナップする必要がある。
             allTimerIDs.delete(timerID);
-            // If the source has completed, and there are no more timers running,
-            // we can complete the resulting observable.
+            // もし入力となるObservableが完了していた場合、そして動いているタイマーがもはや存在しない場合、
+            // 新しく生成されるObservableも完了させる。
             if (hasCompleted && allTimerIDs.size === 0) {
               subscriber.complete();
             }
@@ -330,23 +330,23 @@ function delay<T>(delayInMillis: number) {
           allTimerIDs.add(timerID);
         },
         error(err) {
-          // We need to make sure we're propagating our errors through.
+          // 入力となるObservableからエラーが送信された場合、それを伝搬させる必要がある。
           subscriber.error(err);
         },
         complete() {
           hasCompleted = true;
-          // If we still have timers running, we don't want to yet.
+          // 動いているタイマーがもはや存在しない場合だけ、新しく生成されるObservableも完了させる。
           if (allTimerIDs.size === 0) {
             subscriber.complete();
           }
         },
       });
 
-      // Return the teardown logic. This will be invoked when
-      // the result errors, completes, or is unsubscribed.
+      // 後始末用のロジックを返す。この関数は
+      // エラー、完了ないし未購読のときに実行される。
       return () => {
         subscription.unsubscribe();
-        // Clean up our timers.
+        // タイマーをすべてクリーンナップする。
         for (const timerID of allTimerIDs) {
           clearTimeout(timerID);
         }
@@ -354,14 +354,14 @@ function delay<T>(delayInMillis: number) {
     });
 }
 
-// Try it out!
+// 試してみよう！
 of(1, 2, 3).pipe(delay(1000)).subscribe(console.log);
 ```
 
-Note that you must
+忘れてはならないこと
 
-1. implement all three Observer functions, `next()`, `error()`, and `complete()` when subscribing to the input Observable.
-2. implement a "teardown" function that cleans up when the Observable completes (in this case by unsubscribing and clearing any pending timeouts).
-3. return that teardown function from the function passed to the Observable constructor.
+1. 他のObservableを入力としてとる場合、`next()`、`error()`そして`complete()` という3つのObservable関数をすべて実装すること。 
+2. Observableが完了した時にクリーンナップを行うための "teardown" 関数を実装すること（この例では入力となるObservableの購読を取り止め、すべてのタイマーをクリアしている）。
+3. Observableコンストラクターに渡す関数の中で後始末のための関数を返すこと。
 
-Of course, this is only an example; the [`delay()`](/api/operators/delay) operator already exists.
+もちろん、ここでこのようなオペレーターの実装を示したのはもっぱら説明のためで、[`delay()`](/api/operators/delay) オペレーターは元から存在します。
