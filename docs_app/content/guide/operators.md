@@ -102,7 +102,7 @@ const fileObservable = urlObservable.pipe(
 - [`exhaustAll()`](/api/operators/exhaustAll) — 
 1つ目の内側のObservableを受信するとそれを購読し、そのObservableから値を受信する都度それを自身の購読者に向けて送信します。処理中の内側のObservableが完了するまでの間は新たな内側のObservableは受信しても破棄します。完了したら次の内側のObservableの到着を待機します。
 
-多くの配列処理ライブラリーが [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) と [`flat()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) （ないし `flatten()` ）を結びつけた [`flatMap()`] を提供しているのと同じように、RxJSのすべての平坦化オペレーターのマッピング版が存在します。 [`concatMap()`](/api/operators/concatMap)と [`mergeMap()`](/api/operators/mergeMap)、 [`switchMap()`](/api/operators/switchMap)と [`exhaustMap()`](/api/operators/exhaustMap)がそれです。
+多くの配列処理ライブラリーが [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) と [`flat()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) （ないし `flatten()` ）を結びつけた [`flatMap()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) を提供しているのと同じように、RxJSのすべての平坦化オペレーターのマッピング版が存在します。 [`concatMap()`](/api/operators/concatMap)と [`mergeMap()`](/api/operators/mergeMap)、 [`switchMap()`](/api/operators/switchMap)と [`exhaustMap()`](/api/operators/exhaustMap)がそれです。
 
 ## マーブル・ダイアグラム
 
